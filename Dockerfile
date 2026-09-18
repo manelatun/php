@@ -59,7 +59,7 @@ RUN <<EOF
     echo 'opcache.interned_strings_buffer=32'
     echo 'opcache.max_accelerated_files=4000'
     echo 'opcache.revalidate_freq=2'
-  } > "$PHP_INI_DIR/conf.d/wordpress-opcache-recommended.ini"
+  } > "$PHP_INI_DIR/conf.d/99-custom-opcache.ini"
 
   {
     echo 'error_reporting = E_ERROR | E_WARNING | E_PARSE | E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_COMPILE_WARNING | E_RECOVERABLE_ERROR'
@@ -71,7 +71,7 @@ RUN <<EOF
     echo 'ignore_repeated_errors = On'
     echo 'ignore_repeated_source = Off'
     echo 'html_errors = Off'
-  } > "$PHP_INI_DIR/conf.d/wordpress-error-logging.ini"
+  } > "$PHP_INI_DIR/conf.d/99-custom-error-logging.ini"
 
   {
     echo 'file_uploads = On'
@@ -79,7 +79,7 @@ RUN <<EOF
     echo 'post_max_size = 128M'
     echo 'memory_limit = 256M'
     echo 'max_execution_time = 60'
-  } > "$PHP_INI_DIR/conf.d/99-custom.ini"
+  } > "$PHP_INI_DIR/conf.d/99-custom-miscellaneous.ini"
 
   #
   # Apache
@@ -94,9 +94,9 @@ RUN <<EOF
     echo 'RemoteIPInternalProxy 192.168.0.0/16'
     echo 'RemoteIPInternalProxy 169.254.0.0/16'
     echo 'RemoteIPInternalProxy 127.0.0.0/8'
-  } > "/etc/apache2/conf-available/99-apache-behind-nginx.conf"
+  } > "/etc/apache2/conf-available/99-apache-behind-reverse-proxy.conf"
 
-  a2enconf 99-apache-behind-nginx
+  a2enconf 99-apache-behind-reverse-proxy
 EOF
 
 RUN <<EOF
